@@ -11,9 +11,8 @@
  */
 function createOutputString(location1, bearing1, location2, bearing2) {    
     // Lat & Long of each Fire Tower
-    const Towers = { Tower1: [42.785463, -72.017079], Tower2: [42.784418, -72.022834] };
-        
-    const ret = intersection(Towers[location1][0], Towers[location1][1], bearing1, Towers[location2][0], Towers[location2][1], bearing2);
+    const Towers = { Tower1: [42.785463, -72.017079], Tower2: [42.784418, -72.022834], NHPeterborough: [42.861900,-71.878722], NHDerry: [42.885653,-71.266487] };
+            const ret = intersection(Towers[location1][0], Towers[location1][1], bearing1, Towers[location2][0], Towers[location2][1], bearing2);
     console.log(ret);
     return `${ret}`;
 }
@@ -133,3 +132,4 @@ function intersection(lat1, lon1, brng1, lat2, lon2, brng2) {
 
   return `${toDeg(latInt)}, ${toDeg(lonInt)}`;
 }
+
