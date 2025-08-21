@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Location & Bearing Calculator</title>
-    <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
@@ -16,11 +15,12 @@
     <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
         <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">Location and Bearing</h1>
 
-        <!-- First input group for Location 1 and Bearing 1 -->
         <div class="mb-4">
             <div class="mb-2">
                 <label for="location1" class="block text-sm font-medium text-gray-700">Location 1</label>
-                <input type="text" id="location1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2" placeholder="e.g., New York">
+                <select id="location1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2">
+                    <option value="" disabled selected>Select a location</option>
+                </select>
             </div>
             <div>
                 <label for="bearing1" class="block text-sm font-medium text-gray-700">Bearing 1 (degrees)</label>
@@ -28,11 +28,12 @@
             </div>
         </div>
 
-        <!-- Second input group for Location 2 and Bearing 2 -->
         <div class="mb-6">
             <div class="mb-2">
                 <label for="location2" class="block text-sm font-medium text-gray-700">Location 2</label>
-                <input type="text" id="location2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2" placeholder="e.g., London">
+                <select id="location2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2">
+                    <option value="" disabled selected>Select a location</option>
+                </select>
             </div>
             <div>
                 <label for="bearing2" class="block text-sm font-medium text-gray-700">Bearing 2 (degrees)</label>
@@ -40,20 +41,26 @@
             </div>
         </div>
 
-        <!-- Button to trigger the calculation -->
         <button id="calculateBtn" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mb-6">
             Calculate
         </button>
 
-        <!-- Output area for the result string -->
         <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
             <p class="text-sm font-medium text-gray-700">Result:</p>
             <p id="outputString" class="mt-1 text-gray-900 font-mono break-words"></p>
         </div>
 
+        <div class="mt-4 flex space-x-2">
+            <button id="copyBtn" class="w-1/2 bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                Copy
+            </button>
+            <button id="findInMapsBtn" class="w-1/2 bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                Find In Maps
+            </button>
+        </div>
+
     </div>
 
-    <!-- Link to the external JavaScript file -->
     <script src="FireFinder.js"></script>
 </body>
 </html>
