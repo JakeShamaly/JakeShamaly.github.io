@@ -233,7 +233,6 @@ function intersection(lat1, lon1, brng1, lat2, lon2, brng2) {
   return `${toDeg(latInt)}, ${toDeg(lonInt)}`;
 }
 
-  return `${toDeg(latInt)}, ${toDeg(lonInt)}`;
-}
+
 
 
