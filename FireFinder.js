@@ -11,20 +11,82 @@
  */
 function createOutputString(location1, bearing1, location2, bearing2) {    
     // Lat & Long of each Fire Tower
-    const Towers = { Tower1: [42.785463, -72.017079], Tower2: [42.784418, -72.022834], NHPeterborough: [42.861900,-71.878722], NHDerry: [42.885653,-71.266487] };
-            const ret = intersection(Towers[location1][0], Towers[location1][1], bearing1, Towers[location2][0], Towers[location2][1], bearing2);
+    const Towers = { 
+        // Tower1: [42.785463, -72.017079], My original test location points for the lake I am vacationing on!
+        // Tower2: [42.784418, -72.022834], 
+        NHPeterborough: [42.861900,-71.878722], 
+        NHDerry: [42.885653,-71.266487],
+        NHGilford: [43.517927, -71.369339],
+        NHFarmington: [43.33143725584826, -71.11609093877593],
+        NHOrange: [43.64954591042697, -71.91422094324123],
+        NHCroyden: [43.48194102492495, -72.2193790481886], // This one I had to locate myself. Not pre-populated in Google Maps.
+        NHMilford: [42.80473637844818, -71.63031890330458],
+        NHEffingham: [43.76773272952898, -71.0369265037831],
+        NHWilmot: [43.383284079983426, -71.85706915353312],
+        NHPittsburg: [45.06285515415562, -71.16246767426217],
+        NHMilan: [44.57231672764399, -71.22319512278509],
+        NHLoudon: [43.278165632022656, -71.50504090697544],
+        NHNottingham: [43.1019331322377, -71.18104668308564],
+        NHStoddard: [43.09405694826296, -72.13497942946528],
+        NHMoultonboro: [43.755754803457705, -71.45794460588132]
+        //NHLancaster: [Unable to find] 
+    };
+        
+    const ret = intersection(Towers[location1][0], Towers[location1][1], bearing1, Towers[location2][0], Towers[location2][1], bearing2);
     console.log(ret);
     return `${ret}`;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Lat & Long of each Fire Tower
+    const Towers = { 
+        // Tower1: [42.785463, -72.017079], My original test locations points for the lake I am vactioning on! 
+        // Tower2: [42.784418, -72.022834], 
+        NHPeterborough: [42.861900,-71.878722], 
+        NHDerry: [42.885653,-71.266487], 
+        NHGilford: [43.517927, -71.369339],
+        NHFarmington: [43.33143725584826, -71.11609093877593],
+        NHOrange: [43.64954591042697, -71.91422094324123],
+        NHCroyden: [43.48194102492495, -72.2193790481886], // This one I had to locate myself. Not pre-populated in Google Maps.
+        NHMilford: [42.80473637844818, -71.63031890330458],
+        NHEffingham: [43.76773272952898, -71.0369265037831],
+        NHWilmot: [43.383284079983426, -71.85706915353312],
+        NHPittsburg: [45.06285515415562, -71.16246767426217],
+        NHMilan: [44.57231672764399, -71.22319512278509],
+        NHLoudon: [43.278165632022656, -71.50504090697544],
+        NHNottingham: [43.1019331322377, -71.18104668308564],
+        NHStoddard: [43.09405694826296, -72.13497942946528],
+        NHMoultonboro: [43.755754803457705, -71.45794460588132]
+        //NHLancaster: [Unable to find]
+    };
+    
     // Get Fields
-    const location1Input = document.getElementById('location1');
+    const location1Select = document.getElementById('location1');
     const bearing1Input = document.getElementById('bearing1');
-    const location2Input = document.getElementById('location2');
+    const location2Select = document.getElementById('location2');
     const bearing2Input = document.getElementById('bearing2');
     const calculateButton = document.getElementById('calculateBtn');
     const outputElement = document.getElementById('outputString');
+    const copyButton = document.getElementById('copyBtn');
+    const findInMapsButton = document.getElementById('findInMapsBtn');
+
+    /**
+     * Populates a select element with options from an object's keys.
+     * @param {HTMLSelectElement} selectElement The select element to populate.
+     * @param {object} optionsObject The object whose keys will be used as options.
+     */
+    const populateSelects = (selectElement, optionsObject) => {
+        for (const key in optionsObject) {
+            const option = document.createElement('option');
+            option.value = key;
+            option.textContent = key;
+            selectElement.appendChild(option);
+        }
+    };
+    
+    // Populate the dropdown menus when the DOM is loaded
+    populateSelects(location1Select, Towers);
+    populateSelects(location2Select, Towers);
 
     /**
      * Handles the click event of the calculate button.
@@ -32,9 +94,9 @@ document.addEventListener('DOMContentLoaded', () => {
      * and displays the returned string.
      */
     const handleCalculate = () => {        
-        const location1 = location1Input.value;
+        const location1 = location1Select.value;
         const bearing1 = bearing1Input.value;
-        const location2 = location2Input.value;
+        const location2 = location2Select.value;
         const bearing2 = bearing2Input.value;
 
         // Check if any fields are empty and provide a message if so
@@ -42,6 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
             outputElement.textContent = 'Please fill out all fields.';
             outputElement.classList.remove('text-gray-900');
             outputElement.classList.add('text-red-500');
+            copyButton.disabled = true;
+            findInMapsButton.disabled = true;
             return; // Stop execution if validation fails
         }
 
@@ -52,13 +116,49 @@ document.addEventListener('DOMContentLoaded', () => {
         outputElement.textContent = resultString;
         outputElement.classList.remove('text-red-500');
         outputElement.classList.add('text-gray-900');
+        copyButton.disabled = false;
+        findInMapsButton.disabled = false;
+    };
+    
+    /**
+     * Handles the click event for the Copy button.
+     * It copies the content of the output string to the clipboard.
+     */
+    const handleCopy = async () => {
+        try {
+            await navigator.clipboard.writeText(outputElement.textContent);
+            // Optionally, provide user feedback
+            copyButton.textContent = 'Copied!';
+            setTimeout(() => {
+                copyButton.textContent = 'Copy';
+            }, 2000);
+        } catch (err) {
+            console.error('Failed to copy text: ', err);
+            // Optionally, provide user feedback for failure
+        }
+    };
+    
+    /**
+     * Handles the click event for the Find In Maps button.
+     * It opens a new tab with a Google Maps search for the output string.
+     */
+    const handleFindInMaps = () => {
+        const query = encodeURIComponent(outputElement.textContent);
+        const url = `https://www.google.com/maps/search/?api=1&query=${query}`;
+        window.open(url, '_blank');
     };
 
-    // Click event listener
+    // Click event listeners
     calculateButton.addEventListener('click', handleCalculate);
+    copyButton.addEventListener('click', handleCopy);
+    findInMapsButton.addEventListener('click', handleFindInMaps);
+
+    // Initially disable the copy and find in maps buttons
+    copyButton.disabled = true;
+    findInMapsButton.disabled = true;
 });
 
-// Chat GPT 5.0 maybe this one will beat mine
+// Used Chat GPT 5.0 to assist in spherical trig (since the earth is not flat Haversine is needed) to be as accurate as possible.
 function intersection(lat1, lon1, brng1, lat2, lon2, brng2) {
   // Convert degrees to radians
   function toRad(deg) { return deg * Math.PI / 180; }
@@ -132,4 +232,8 @@ function intersection(lat1, lon1, brng1, lat2, lon2, brng2) {
 
   return `${toDeg(latInt)}, ${toDeg(lonInt)}`;
 }
+
+  return `${toDeg(latInt)}, ${toDeg(lonInt)}`;
+}
+
 
